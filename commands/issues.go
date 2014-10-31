@@ -35,11 +35,14 @@ func issues(cmd *Command, args *Args) {
 			utils.Check(err)
 
 			for _, issue := range issues {
-				if flagAll {
-					fmt.Printf("%s: %s\n", issue.State, issue.Title)
-				}
-				if !flagAll && (issue.Assignee.ID == user.ID) {
-					fmt.Printf("%s: %s\n", issue.State, issue.Title)
+				if (flagAll || (issue.Assignee.ID == user.ID)) && issue.State == "open" {
+					fmt.Println("issue", issue.Number)
+					fmt.Printf("%-9s %s\n", "Author:", issue.User.Login)
+					fmt.Printf("%-9s %s\n", "Assignee:", issue.Assignee.Login)
+					fmt.Printf("%-9s %s\n", "Title:", issue.Title)
+					if !flagAll {
+						fmt.Printf("%-9s %s\n", "Body:\n", issue.Body)
+					}
 				}
 			}
 		}
